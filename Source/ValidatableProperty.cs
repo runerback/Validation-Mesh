@@ -5,17 +5,19 @@ namespace ValidationExtention
 {
 	public static class ValidatableProperty
 	{
-		public static IValidatableProperty<TSource, TElement> Select<TSource, TElement>(this IValidatable<TSource> validatable, Expression<Func<TSource, TElement>> keySelector)
+		public static IValidatableProperty<TSource, TKey> Select<TSource, TKey>(this IValidatable<TSource> validatable, Expression<Func<TSource, TKey>> keySelector)
 		{
 			if (validatable == null)
 				throw new ArgumentNullException("validatable");
 			if (keySelector == null)
 				throw new ArgumentNullException("keySelector");
 
-			return new ValidatablePropertyAdapter<TSource, TElement>(validatable, keySelector);
+			return new ValidatablePropertyAdapter<TSource, TKey>(validatable, keySelector);
 		}
 
-		public static IValidatableProperty<TSource, TElement> AddRule<TSource, TElement>(this IValidatableProperty<TSource, TElement> validatable, Func<TElement, bool> rule, string errorMessage = null)
+		#region AddRule
+
+		public static IValidatableProperty<TSource, TKey> AddRule<TSource, TKey>(this IValidatableProperty<TSource, TKey> validatable, Func<TKey, bool> rule, string errorMessage = null)
 		{
 			if (validatable == null)
 				throw new ArgumentNullException("validatable");
@@ -29,44 +31,46 @@ namespace ValidationExtention
 			return validatable;
 		}
 
-		public static IValidatableProperty<TSource, TElement> Required<TSource, TElement>(this IValidatableProperty<TSource, TElement> validatable, string errorMessage = "required")
+		public static IValidatableProperty<TSource, TKey> Required<TSource, TKey>(this IValidatableProperty<TSource, TKey> validatable, string errorMessage = "required")
 		{
 			return AddRule(
 				validatable,
-				ValidationRules.Required<TElement>(),
+				ValidationRules.Required<TKey>(),
 				errorMessage);
 		}
 
-		public static IValidatableProperty<TSource, TElement> StringLength<TSource, TElement>(this IValidatableProperty<TSource, TElement> validatable, int maxLength, string errorMessage = "too long")
+		public static IValidatableProperty<TSource, TKey> StringLength<TSource, TKey>(this IValidatableProperty<TSource, TKey> validatable, int maxLength, string errorMessage = "too long")
 		{
 			return AddRule(
 				validatable,
-				ValidationRules.StringLength<TElement>(maxLength),
+				ValidationRules.StringLength<TKey>(maxLength),
 				errorMessage);
 		}
 
-		public static IValidatableProperty<TSource, TElement> StringLength<TSource, TElement>(this IValidatableProperty<TSource, TElement> validatable, int maxLength, int minLength, string errorMessage = "invalid string length")
+		public static IValidatableProperty<TSource, TKey> StringLength<TSource, TKey>(this IValidatableProperty<TSource, TKey> validatable, int maxLength, int minLength, string errorMessage = "invalid string length")
 		{
 			return AddRule(
 				validatable,
-				ValidationRules.StringLength<TElement>(maxLength, minLength),
+				ValidationRules.StringLength<TKey>(maxLength, minLength),
 				errorMessage);
 		}
 
-		public static IValidatableProperty<TSource, TElement> IsInt32<TSource, TElement>(this IValidatableProperty<TSource, TElement> validatable, string errorMessage = "invalid numeric value")
+		public static IValidatableProperty<TSource, TKey> IsInt32<TSource, TKey>(this IValidatableProperty<TSource, TKey> validatable, string errorMessage = "invalid numeric value")
 		{
 			return AddRule(
 				validatable,
-				ValidationRules.IsInt32<TElement>(),
+				ValidationRules.IsInt32<TKey>(),
 				errorMessage);
 		}
 
-		public static IValidatableProperty<TSource, TElement> IsDouble<TSource, TElement>(this IValidatableProperty<TSource, TElement> validatable, string errorMessage = "invalid numeric value")
+		public static IValidatableProperty<TSource, TKey> IsDouble<TSource, TKey>(this IValidatableProperty<TSource, TKey> validatable, string errorMessage = "invalid numeric value")
 		{
 			return AddRule(
 				validatable,
-				ValidationRules.IsDouble<TElement>(),
+				ValidationRules.IsDouble<TKey>(),
 				errorMessage);
 		}
+
+		#endregion AddRule
 	}
 }

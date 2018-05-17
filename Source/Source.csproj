@@ -39,8 +39,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IValidatable.cs" />
-    <Compile Include="IValidator.cs" />
+    <Compile Include="Interface\IValidatable.cs" />
+    <Compile Include="Interface\IValidator.cs" />
+    <Compile Include="Interface\IValidatableProperty.cs" />
+    <Compile Include="Interface\IPropertyValidator.cs" />
     <Compile Include="PropertyValidator.cs" />
     <Compile Include="ValidatableProperty.cs" />
     <Compile Include="ValidatablePropertyAdapter.cs" />
